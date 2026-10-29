@@ -1,69 +1,202 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 
+const NAV_ITEMS = [
+  "Home",
+  "About",
+  "Skills",
+  "Mobile Apps",
+  "Web Projects",
+  "Design",
+  "Photography",
+  "Videography",
+  "Certificates",
+  "Contact",
+] as const;
+
+type NavItem = (typeof NAV_ITEMS)[number];
+
+const PORTFOLIO_LAYERS = [
+  {
+    id: "port-with-star",
+    alt: "@mizanyf Port*",
+    animClass: "animate-porto-top",
+    clipPath:
+      "polygon(0% 0%, 100% 0%, 100% 54%, 59.65% 54%, 59.65% 52.13%, 51.51% 52.13%, 51.51% 50.83%, 49.09% 56.25%, 49.09% 52.13%, 0% 52.13%)",
+  },
+  {
+    id: "folio-bottom",
+    alt: "Flutter Developer folio 2026 Version.",
+    animClass: "animate-porto-bottom",
+    clipPath:
+      "polygon(0% 52.13%, 49.09% 52.13%, 49.09% 56.25%, 51.51% 50.83%, 51.51% 52.13%, 59.65% 52.13%, 59.65% 54%, 100% 54%, 100% 100%, 0% 100%)",
+  },
+] as const;
+
 export default function Home() {
+  const [activeMenu, setActiveMenu] = useState<NavItem>("Home");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+
+  const handleSelectMenu = (item: NavItem) => {
+    setActiveMenu(item);
+    setIsMobileMenuOpen(false);
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <main className="relative min-h-screen w-full bg-[#FFFFFF] overflow-x-hidden">
+      {/* Desktop & Tablet Navbar: Floating Center Glassmorphism */}
+      <header className="fixed top-6 lg:top-8 left-1/2 -translate-x-1/2 z-50 hidden md:block w-max max-w-[calc(100vw-2rem)]">
+        <nav
+          aria-label="Main Navigation"
+          className="flex flex-nowrap items-center justify-center gap-1 xl:gap-1.5 rounded-2xl border border-white/80 bg-white/60 p-1.5 xl:p-2 ring-1 ring-[#DCE9FF]/80 shadow-[0_8px_32px_rgba(71,132,255,0.14)] backdrop-blur-md backdrop-saturate-150 transition-all duration-300"
+        >
+          {NAV_ITEMS.map((item) => {
+            const isActive = activeMenu === item;
+            return (
+              <button
+                key={item}
+                type="button"
+                onClick={() => handleSelectMenu(item)}
+                aria-current={isActive ? "page" : undefined}
+                className={`cursor-pointer shrink-0 rounded-xl px-2.5 py-1.5 lg:px-3.5 lg:py-1.5 xl:px-4 xl:py-2 text-[11.5px] lg:text-[13px] xl:text-sm font-medium whitespace-nowrap transition-all duration-200 ${
+                  isActive
+                    ? "bg-[#4784FF] text-white shadow-[0_4px_12px_rgba(71,132,255,0.3)]"
+                    : "text-[#4784FF] hover:bg-white/75 hover:text-[#193A75]"
+                }`}
+              >
+                {item}
+              </button>
+            );
+          })}
+        </nav>
+      </header>
+
+      {/* Mobile / Android Navbar: Top-Right Blunt-Square Glassmorphism Hamburger Button & Menu */}
+      {isMobileMenuOpen && (
+        <div
+          aria-hidden="true"
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="fixed inset-0 z-40 md:hidden"
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      )}
+
+      <header className="fixed top-4 right-4 z-50 flex flex-col items-end md:hidden">
+        <button
+          type="button"
+          onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+          aria-label="Toggle Navigation Menu"
+          aria-expanded={isMobileMenuOpen}
+          className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-2xl border border-white/80 bg-white/60 ring-1 ring-[#DCE9FF]/80 shadow-[0_8px_32px_rgba(71,132,255,0.14)] backdrop-blur-md backdrop-saturate-150 transition-all duration-200 hover:bg-white/80 active:scale-95"
+        >
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="text-[#4784FF]"
           >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+            <path
+              d="M4 6.5H20M4 12H20M4 17.5H20"
+              stroke="#4784FF"
+              strokeWidth="2.4"
+              strokeLinecap="round"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          </svg>
+        </button>
+
+        {isMobileMenuOpen && (
+          <nav
+            aria-label="Mobile Navigation"
+            className="mt-2.5 flex w-52 flex-col gap-1 rounded-2xl border border-white/80 bg-white/75 p-2 ring-1 ring-[#DCE9FF]/80 shadow-[0_12px_36px_rgba(71,132,255,0.18)] backdrop-blur-md backdrop-saturate-150"
           >
-            Documentation
-          </a>
+            {NAV_ITEMS.map((item) => {
+              const isActive = activeMenu === item;
+              return (
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => handleSelectMenu(item)}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`cursor-pointer rounded-xl px-3.5 py-2 text-left text-sm font-medium transition-all duration-200 ${
+                    isActive
+                      ? "bg-[#4784FF] text-white shadow-[0_4px_12px_rgba(71,132,255,0.3)]"
+                      : "text-[#4784FF] hover:bg-white/80 hover:text-[#193A75]"
+                  }`}
+                >
+                  {item}
+                </button>
+              );
+            })}
+          </nav>
+        )}
+      </header>
+
+      {/* Hero Section: Multi-Layer Composition (White BG + Left Asset + Right Asset + Simple Animated Portfolio Typography) */}
+      <section className="relative flex h-dvh min-h-screen w-full items-center justify-center bg-[#FFFFFF] overflow-hidden">
+        {/* Layer 1A: Left Wave Asset (Pinned to Left Edge, Simple Breathing Scale) */}
+        <div
+          style={{ left: "min(0px, calc(30vw - 55dvh))" }}
+          className="pointer-events-none absolute top-0 z-0 h-dvh w-[177.78dvh] select-none animate-wave-left"
+        >
+          <Image
+            src="/assets/landingpages/assetskiri.png"
+            alt="Portfolio Left Wave Decoration"
+            fill
+            priority
+            unoptimized
+            sizes="100vw"
+            className="object-contain object-left mix-blend-multiply select-none"
+          />
         </div>
-      </main>
-    </div>
+
+        {/* Layer 1B: Right Wave Asset (Pinned to Right Edge, Simple Breathing Scale) */}
+        <div
+          style={{ right: "min(0px, calc(30vw - 55dvh))" }}
+          className="pointer-events-none absolute top-0 z-0 h-dvh w-[177.78dvh] select-none animate-wave-right"
+        >
+          <Image
+            src="/assets/landingpages/assetskanan.png"
+            alt="Portfolio Right Wave Decoration"
+            fill
+            priority
+            unoptimized
+            sizes="100vw"
+            className="object-contain object-right mix-blend-multiply select-none"
+          />
+        </div>
+
+        {/* Layer 2: Center Portfolio Typography (Proportional on Mobile, Zoom, and Desktop) */}
+        <div className="relative z-10 flex h-full w-full items-center justify-center pointer-events-none">
+          <div className="relative aspect-video shrink-0 w-[195vw] sm:w-[170vw] md:w-[145vw] lg:w-[max(120vw,160dvh)] xl:w-[max(100vw,175dvh)] max-w-none select-none transition-all duration-300">
+            {PORTFOLIO_LAYERS.map((layer) => (
+              <div
+                key={layer.id}
+                style={{ clipPath: layer.clipPath }}
+                className={`absolute inset-0 ${layer.animClass}`}
+              >
+                <Image
+                  src="/assets/landingpages/portofolio.png"
+                  alt={layer.alt}
+                  width={3840}
+                  height={2160}
+                  priority
+                  unoptimized
+                  className="block h-full w-full select-none"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Blank White Section for Scroll Testing */}
+      <section
+        aria-label="Blank Scroll Test Section"
+        className="min-h-screen w-full bg-[#FFFFFF]"
+      />
+    </main>
   );
 }
