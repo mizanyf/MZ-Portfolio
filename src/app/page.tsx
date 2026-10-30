@@ -2,9 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import assetsKiriImg from "../../assets/landinpages/assetskiri.png";
+import assetsKananImg from "../../assets/landinpages/assetskanan.png";
+import portofolioImg from "../../assets/landinpages/portofolio.png";
 import aboutMeTitleImg from "../../assets/aboutme/aboutme.png";
 import fotoMeImg from "../../assets/aboutme/fotome.png";
 import bintangImg from "../../assets/aboutme/bintang.png";
+import TechnicalSkillsSection from "../components/TechnicalSkillsSection";
 
 const NAV_ITEMS = [
   "Home",
@@ -193,6 +197,11 @@ export default function Home() {
       } else if (aboutEl) {
         aboutEl.scrollIntoView({ behavior: "smooth" });
       }
+    } else if (item === "Skills") {
+      const skillsEl = document.getElementById("skills");
+      if (skillsEl) {
+        skillsEl.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
 
@@ -297,7 +306,7 @@ export default function Home() {
           className="pointer-events-none absolute top-0 z-0 h-dvh w-[177.78dvh] select-none animate-wave-left"
         >
           <Image
-            src="/assets/landingpages/assetskiri.png"
+            src={assetsKiriImg}
             alt="Portfolio Left Wave Decoration"
             fill
             priority
@@ -313,7 +322,7 @@ export default function Home() {
           className="pointer-events-none absolute top-0 z-0 h-dvh w-[177.78dvh] select-none animate-wave-right"
         >
           <Image
-            src="/assets/landingpages/assetskanan.png"
+            src={assetsKananImg}
             alt="Portfolio Right Wave Decoration"
             fill
             priority
@@ -333,7 +342,7 @@ export default function Home() {
                 className={`absolute inset-0 ${layer.animClass}`}
               >
                 <Image
-                  src="/assets/landingpages/portofolio.png"
+                  src={portofolioImg}
                   alt={layer.alt}
                   width={3840}
                   height={2160}
@@ -363,7 +372,7 @@ export default function Home() {
       <section
         id="about"
         aria-label="About Me"
-        className="relative w-full bg-[#FFFFFF] overflow-hidden"
+        className="relative z-20 w-full bg-[#FFFFFF] overflow-visible"
       >
         {/* 16:9 Stage Matching Reference Composition */}
         <div className="relative mx-auto w-full max-w-[1920px] aspect-video select-none">
@@ -416,12 +425,12 @@ export default function Home() {
             className="pointer-events-none absolute inset-x-0 bottom-0 z-[25] h-[24%] bg-gradient-to-t from-[#FFFFFF] via-[#FFFFFF]/95 to-transparent"
           />
 
-          {/* Layer 4: Right Halftone Star (In Front of Photo, Fixed Position, Slow Counter-Clockwise Scroll Rotation) */}
+          {/* Layer 4: Right Halftone Star (In Front of Photo & Extending Cleanly Over Bottom Boundary, Slow Counter-Clockwise Scroll Rotation) */}
           <div
             style={{
               transform: `rotate(${12 - scrollY * 0.05}deg)`,
             }}
-            className="pointer-events-none absolute left-[45.5%] top-[68.5%] z-30 w-[39%] aspect-video transition-transform duration-500 ease-out"
+            className="pointer-events-none absolute left-[45.5%] top-[68.5%] z-40 w-[39%] aspect-video transition-transform duration-500 ease-out"
           >
             <div className="relative h-full w-full animate-about-star-front">
               <Image
@@ -482,7 +491,7 @@ export default function Home() {
         </div>
 
         {/* Mobile Text Layout (< md) */}
-        <div className="font-poppins italic md:hidden relative z-30 -mt-4 flex flex-col gap-3.5 px-6 pt-0 pb-10 bg-[#FFFFFF]">
+        <div className="font-poppins italic md:hidden relative z-30 -mt-4 flex flex-col gap-3.5 px-6 pt-0 pb-10 bg-transparent">
           <div>
             <p className="text-base font-normal text-[#4E7CD9]">
               Hello I&apos;m
@@ -522,11 +531,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Plain White Section Below About Me to Test Scrolling & Photo Bottom White Gradient */}
-      <section
-        aria-label="Blank Scroll Test Section"
-        className="min-h-screen w-full bg-[#FFFFFF]"
-      />
+      {/* Technical Skills Section */}
+      <TechnicalSkillsSection />
     </main>
   );
 }
