@@ -188,14 +188,14 @@ export default function Home() {
         let rawProgress = 0;
 
         // Long stable plateau: stars STAY fully emerged throughout the entire About Me section!
-        // From ratio 0.48 down to 0.02 (photo reaching the very top edge of the screen)
-        if (ratio >= 0.02 && ratio <= 0.48) {
+        // From ratio 0.46 down to 0.02 (photo reaching the very top edge of the screen)
+        if (ratio >= 0.02 && ratio <= 0.46) {
           rawProgress = 1.0;
         }
-        // Entrance: plays when scrolling down from top, while the stars are CLEARLY visible on screen
-        // Between 78% (clearly inside lower viewport) down to 48% (center of viewport)
-        else if (ratio > 0.48 && ratio < 0.78) {
-          const t = (0.78 - ratio) / (0.78 - 0.48); // 0.0 (shrunken) -> 1.0 (emerged)
+        // Entrance: starts immediately when fotome begins to become visible from the bottom,
+        // expanding slowly, smoothly, and gracefully as you scroll (from ratio 1.02 down to 0.46)
+        else if (ratio > 0.46 && ratio < 1.02) {
+          const t = (1.02 - ratio) / (1.02 - 0.46); // 0.0 (shrunken) -> 1.0 (emerged)
           rawProgress = t * t * (3 - 2 * t);
         }
         // Exit: only begins when photo is actually exiting past the top of the viewport towards Skills
@@ -456,7 +456,7 @@ export default function Home() {
               transform: `translate3d(${leftStarTransX}%, ${leftStarTransY}%, 0) scale(${starScale})`,
               opacity: starOpacity,
               transition:
-                "transform 800ms cubic-bezier(0.16, 1, 0.3, 1), opacity 800ms cubic-bezier(0.16, 1, 0.3, 1)",
+                "transform 1000ms cubic-bezier(0.16, 1, 0.3, 1), opacity 1000ms cubic-bezier(0.16, 1, 0.3, 1)",
             }}
             className="pointer-events-none absolute left-[11.5%] top-[52%] z-[15] w-[39%] aspect-video will-change-transform"
           >
@@ -503,7 +503,7 @@ export default function Home() {
               transform: `translate3d(${rightStarTransX}%, ${rightStarTransY}%, 0) scale(${starScale})`,
               opacity: starOpacity,
               transition:
-                "transform 800ms cubic-bezier(0.16, 1, 0.3, 1), opacity 800ms cubic-bezier(0.16, 1, 0.3, 1)",
+                "transform 1000ms cubic-bezier(0.16, 1, 0.3, 1), opacity 1000ms cubic-bezier(0.16, 1, 0.3, 1)",
             }}
             className="pointer-events-none absolute left-[45.5%] top-[68.5%] z-40 w-[39%] aspect-video will-change-transform"
           >
