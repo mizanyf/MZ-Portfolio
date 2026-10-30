@@ -3,8 +3,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image, { type StaticImageData } from "next/image";
 import assetsLancipImg from "../../assets/assetslancip.png";
-import assetsKiriImg from "../../assets/landinpages/assetskiri.png";
-import assetsKananImg from "../../assets/landinpages/assetskanan.png";
 import toolsTitleImg from "../../public/assets/tools/Tools.png";
 import spreedsheetImg from "../../public/assets/tools/Spreedsheet.png";
 import slidesImg from "../../public/assets/tools/Slides.png";
@@ -575,43 +573,6 @@ function SkillCategoryCard({
   );
 }
 
-function ModernBlueWaveBackdrop() {
-  return (
-    <div
-      aria-hidden="true"
-      className="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none"
-    >
-      {/* Left Subtle Modern Silk Wave (Directly from Landing Pages Assets, Thin & Elegant) */}
-      <div className="pointer-events-none absolute top-0 -left-12 sm:-left-8 lg:left-0 h-full w-[50vw] max-w-[720px] select-none animate-wave-left">
-        <Image
-          src={assetsKiriImg}
-          alt=""
-          fill
-          unoptimized
-          sizes="(max-width: 768px) 50vw, 720px"
-          className="object-contain object-left mix-blend-multiply opacity-55 sm:opacity-70 select-none"
-        />
-      </div>
-
-      {/* Right Subtle Modern Silk Wave (Directly from Landing Pages Assets, Thin & Elegant) */}
-      <div className="pointer-events-none absolute top-0 -right-12 sm:-right-8 lg:right-0 h-full w-[50vw] max-w-[720px] select-none animate-wave-right">
-        <Image
-          src={assetsKananImg}
-          alt=""
-          fill
-          unoptimized
-          sizes="(max-width: 768px) 50vw, 720px"
-          className="object-contain object-right mix-blend-multiply opacity-55 sm:opacity-70 select-none"
-        />
-      </div>
-
-      {/* Top & Bottom Soft White Vignettes for Seamless Smooth Blending */}
-      <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-[#FFFFFF] via-[#FFFFFF]/85 to-transparent" />
-      <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#FFFFFF] via-[#FFFFFF]/85 to-transparent" />
-    </div>
-  );
-}
-
 interface FloatingToolItem {
   id: string;
   alt: string;
@@ -792,7 +753,7 @@ const FLOATING_TOOLS: FloatingToolItem[] = [
     positionClass: "left-[38.0%] top-[43.5%] w-[24.0%] aspect-[1346/906]",
     mobileScaleClass: "scale-[1.88]",
     mobileSide: "left",
-    mobileIndentClass: "ml-3 sm:ml-5 pt-2",
+    mobileIndentClass: "ml-4 sm:ml-6 pt-2",
     mobileTiltDeg: -7,
     idleAnimClass: "animate-about-star-front",
     delayMs: 500,
@@ -1014,9 +975,6 @@ export default function TechnicalSkillsSection() {
       aria-label="Technical Skills"
       className="relative z-10 w-full bg-[#FFFFFF] py-20 sm:py-24 lg:py-28 px-4 sm:px-6 lg:px-10 overflow-hidden"
     >
-      {/* Modern Blue-Gradient Flowing Waves (Replacing the 2 Halftone Stars) */}
-      <ModernBlueWaveBackdrop />
-
       {/* Main Centered Content Container */}
       <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center text-center">
         {/* Section Title with Official Sharp Star Asset (assetslancip.png) */}

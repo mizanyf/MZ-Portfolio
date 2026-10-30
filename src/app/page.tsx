@@ -167,14 +167,66 @@ export default function Home() {
   const [activeMenu, setActiveMenu] = useState<NavItem>("Home");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const [scrollY, setScrollY] = useState<number>(0);
+  const [aboutProgress, setAboutProgress] = useState<number>(0);
 
   useEffect(() => {
+    let rafId = 0;
+
     const handleScroll = () => {
       setScrollY(window.scrollY);
+
+      const aboutEl = document.getElementById("about");
+      if (aboutEl) {
+        const rect = aboutEl.getBoundingClientRect();
+        const vh = window.innerHeight || 1;
+        // Vertical center of the stars and portrait photo cluster
+        const starsCenterY = rect.top + rect.height * 0.55;
+        // Position of the stars relative to viewport height:
+        // > 1.0: offscreen below, 0.5: center of viewport, < 0.0: offscreen above
+        const ratio = starsCenterY / vh;
+
+        let rawProgress = 0;
+
+        // Long stable plateau: stars STAY fully emerged throughout the entire About Me section!
+        // From ratio 0.48 down to 0.02 (photo reaching the very top edge of the screen)
+        if (ratio >= 0.02 && ratio <= 0.48) {
+          rawProgress = 1.0;
+        }
+        // Entrance: plays when scrolling down from top, while the stars are CLEARLY visible on screen
+        // Between 78% (clearly inside lower viewport) down to 48% (center of viewport)
+        else if (ratio > 0.48 && ratio < 0.78) {
+          const t = (0.78 - ratio) / (0.78 - 0.48); // 0.0 (shrunken) -> 1.0 (emerged)
+          rawProgress = t * t * (3 - 2 * t);
+        }
+        // Exit: only begins when photo is actually exiting past the top of the viewport towards Skills
+        // Between 0.02 down to -0.22 (well past the top edge)
+        else if (ratio < 0.02 && ratio > -0.22) {
+          const t = (ratio - -0.22) / (0.02 - -0.22); // 1.0 (emerged) -> 0.0 (shrunken)
+          rawProgress = t * t * (3 - 2 * t);
+        }
+        // Otherwise, shrunken state (far above or below)
+        else {
+          rawProgress = 0.0;
+        }
+
+        setAboutProgress(rawProgress);
+      }
     };
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    const onScrollOrResize = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(handleScroll);
+    };
+
+    rafId = requestAnimationFrame(handleScroll);
+    window.addEventListener("scroll", onScrollOrResize, { passive: true });
+    window.addEventListener("resize", onScrollOrResize, { passive: true });
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("scroll", onScrollOrResize);
+      window.removeEventListener("resize", onScrollOrResize);
+    };
   }, []);
 
   const handleSelectMenu = (item: NavItem) => {
@@ -204,6 +256,16 @@ export default function Home() {
       }
     }
   };
+
+  // Halftone stars emerge when About section is viewed, and shrink slightly towards center of fotome (the person) when scrolled away
+  const leftStarTransX = (1 - aboutProgress) * 14.0;
+  const leftStarTransY = (1 - aboutProgress) * -17.0;
+  const rightStarTransX = (1 - aboutProgress) * -11.0;
+  const rightStarTransY = (1 - aboutProgress) * -28.0;
+
+  // Subtle shrink ("menciut sedikit saja" - down to 82% scale & 70% opacity rather than disappearing)
+  const starScale = 0.82 + aboutProgress * 0.18;
+  const starOpacity = 0.7 + aboutProgress * 0.3;
 
   return (
     <main className="relative min-h-screen w-full bg-[#FFFFFF] overflow-x-hidden">
@@ -388,22 +450,32 @@ export default function Home() {
             />
           </div>
 
-          {/* Layer 2: Left Halftone Star (Strictly Behind Photo, Fixed Position, Slow Clockwise Scroll Rotation) */}
+          {/* Layer 2: Left Halftone Star (Strictly Behind Photo, Fixed Position, Slow Clockwise Scroll Rotation, Shrinks to Center Person When Scrolled Away) */}
           <div
             style={{
-              transform: `rotate(${-14 + scrollY * 0.05}deg)`,
+              transform: `translate3d(${leftStarTransX}%, ${leftStarTransY}%, 0) scale(${starScale})`,
+              opacity: starOpacity,
+              transition:
+                "transform 800ms cubic-bezier(0.16, 1, 0.3, 1), opacity 800ms cubic-bezier(0.16, 1, 0.3, 1)",
             }}
-            className="pointer-events-none absolute left-[11.5%] top-[52%] z-[15] w-[39%] aspect-video transition-transform duration-500 ease-out"
+            className="pointer-events-none absolute left-[11.5%] top-[52%] z-[15] w-[39%] aspect-video will-change-transform"
           >
-            <div className="relative h-full w-full animate-about-star-back">
-              <Image
-                src={bintangImg}
-                alt="Decorative Star Back"
-                fill
-                unoptimized
-                sizes="45vw"
-                className="object-contain object-center select-none"
-              />
+            <div
+              style={{
+                transform: `rotate(${-14 + scrollY * 0.05}deg)`,
+              }}
+              className="relative h-full w-full transition-transform duration-500 ease-out"
+            >
+              <div className="relative h-full w-full animate-about-star-back">
+                <Image
+                  src={bintangImg}
+                  alt="Decorative Star Back"
+                  fill
+                  unoptimized
+                  sizes="45vw"
+                  className="object-contain object-center select-none"
+                />
+              </div>
             </div>
           </div>
 
@@ -425,22 +497,32 @@ export default function Home() {
             className="pointer-events-none absolute inset-x-0 bottom-0 z-[25] h-[24%] bg-gradient-to-t from-[#FFFFFF] via-[#FFFFFF]/95 to-transparent"
           />
 
-          {/* Layer 4: Right Halftone Star (In Front of Photo & Extending Cleanly Over Bottom Boundary, Slow Counter-Clockwise Scroll Rotation) */}
+          {/* Layer 4: Right Halftone Star (In Front of Photo & Extending Cleanly Over Bottom Boundary, Slow Counter-Clockwise Scroll Rotation, Shrinks to Center Person When Scrolled Away) */}
           <div
             style={{
-              transform: `rotate(${12 - scrollY * 0.05}deg)`,
+              transform: `translate3d(${rightStarTransX}%, ${rightStarTransY}%, 0) scale(${starScale})`,
+              opacity: starOpacity,
+              transition:
+                "transform 800ms cubic-bezier(0.16, 1, 0.3, 1), opacity 800ms cubic-bezier(0.16, 1, 0.3, 1)",
             }}
-            className="pointer-events-none absolute left-[45.5%] top-[68.5%] z-40 w-[39%] aspect-video transition-transform duration-500 ease-out"
+            className="pointer-events-none absolute left-[45.5%] top-[68.5%] z-40 w-[39%] aspect-video will-change-transform"
           >
-            <div className="relative h-full w-full animate-about-star-front">
-              <Image
-                src={bintangImg}
-                alt="Decorative Star Front"
-                fill
-                unoptimized
-                sizes="40vw"
-                className="object-contain object-center select-none"
-              />
+            <div
+              style={{
+                transform: `rotate(${12 - scrollY * 0.05}deg)`,
+              }}
+              className="relative h-full w-full transition-transform duration-500 ease-out"
+            >
+              <div className="relative h-full w-full animate-about-star-front">
+                <Image
+                  src={bintangImg}
+                  alt="Decorative Star Front"
+                  fill
+                  unoptimized
+                  sizes="40vw"
+                  className="object-contain object-center select-none"
+                />
+              </div>
             </div>
           </div>
 
