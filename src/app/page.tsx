@@ -56,7 +56,11 @@ function SocialAndActionButtons({ isMobile = false }: { isMobile?: boolean }) {
     : "font-poppins not-italic inline-flex cursor-pointer items-center justify-center rounded-xl px-3 py-1.5 lg:px-4 lg:py-2 text-[clamp(10px,1vw,15px)] font-medium whitespace-nowrap transition-all duration-200 active:scale-95";
 
   return (
-    <div className="mt-4 lg:mt-5 flex flex-col items-end gap-4 lg:gap-5">
+    <div
+      className={`${
+        isMobile ? "mt-0.5 gap-3" : "mt-4 lg:mt-5 gap-4 lg:gap-5"
+      } flex flex-col items-end`}
+    >
       {/* Row 1: Social Media Logo Buttons with Wider Spacing Between Icons */}
       <div className="flex items-center justify-end gap-3.5 lg:gap-4.5">
         {/* Instagram (@mizanyf) */}
@@ -168,45 +172,58 @@ export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const [scrollY, setScrollY] = useState<number>(0);
   const [aboutProgress, setAboutProgress] = useState<number>(0);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   useEffect(() => {
     let rafId = 0;
 
     const handleScroll = () => {
       setScrollY(window.scrollY);
+      const isMob = window.innerWidth < 768;
+      setIsMobile(isMob);
 
-      const aboutEl = document.getElementById("about");
-      if (aboutEl) {
-        const rect = aboutEl.getBoundingClientRect();
+      // Measure the actual 16:9 stage where the photo and stars live
+      const stageEl =
+        document.getElementById("about-stage") ||
+        document.getElementById("about");
+      if (stageEl) {
+        const rect = stageEl.getBoundingClientRect();
         const vh = window.innerHeight || 1;
-        // Vertical center of the stars and portrait photo cluster
-        const starsCenterY = rect.top + rect.height * 0.55;
-        // Position of the stars relative to viewport height:
-        // > 1.0: offscreen below, 0.5: center of viewport, < 0.0: offscreen above
+
+        // Accurate vertical center of the photo and stars on both desktop and mobile
+        const starsCenterY = rect.top + rect.height * 0.5;
         const ratio = starsCenterY / vh;
 
         let rawProgress = 0;
 
-        // Long stable plateau: stars STAY fully emerged throughout the entire About Me section!
-        // From ratio 0.46 down to 0.02 (photo reaching the very top edge of the screen)
-        if (ratio >= 0.02 && ratio <= 0.46) {
-          rawProgress = 1.0;
-        }
-        // Entrance: starts immediately when fotome begins to become visible from the bottom,
-        // expanding slowly, smoothly, and gracefully as you scroll (from ratio 1.02 down to 0.46)
-        else if (ratio > 0.46 && ratio < 1.02) {
-          const t = (1.02 - ratio) / (1.02 - 0.46); // 0.0 (shrunken) -> 1.0 (emerged)
-          rawProgress = t * t * (3 - 2 * t);
-        }
-        // Exit: only begins when photo is actually exiting past the top of the viewport towards Skills
-        // Between 0.02 down to -0.22 (well past the top edge)
-        else if (ratio < 0.02 && ratio > -0.22) {
-          const t = (ratio - -0.22) / (0.02 - -0.22); // 1.0 (emerged) -> 0.0 (shrunken)
-          rawProgress = t * t * (3 - 2 * t);
-        }
-        // Otherwise, shrunken state (far above or below)
-        else {
-          rawProgress = 0.0;
+        if (isMob) {
+          // Dedicated Mobile Tuning:
+          // Triggers immediately when the photo starts peeking into the bottom of the screen (ratio 1.18)
+          // and reaches full emergence by ratio 0.65 (in lower-middle screen, no deep scrolling needed!)
+          if (ratio >= -0.15 && ratio <= 0.65) {
+            rawProgress = 1.0;
+          } else if (ratio > 0.65 && ratio < 1.18) {
+            const t = (1.18 - ratio) / (1.18 - 0.65);
+            rawProgress = t * t * (3 - 2 * t);
+          } else if (ratio < -0.15 && ratio > -0.4) {
+            const t = (ratio - -0.4) / (-0.15 - -0.4);
+            rawProgress = t * t * (3 - 2 * t);
+          } else {
+            rawProgress = 0.0;
+          }
+        } else {
+          // Desktop Tuning:
+          if (ratio >= 0.02 && ratio <= 0.46) {
+            rawProgress = 1.0;
+          } else if (ratio > 0.46 && ratio < 1.02) {
+            const t = (1.02 - ratio) / (1.02 - 0.46);
+            rawProgress = t * t * (3 - 2 * t);
+          } else if (ratio < 0.02 && ratio > -0.22) {
+            const t = (ratio - -0.22) / (0.02 - -0.22);
+            rawProgress = t * t * (3 - 2 * t);
+          } else {
+            rawProgress = 0.0;
+          }
         }
 
         setAboutProgress(rawProgress);
@@ -266,6 +283,11 @@ export default function Home() {
   // Subtle shrink ("menciut sedikit saja" - down to 82% scale & 70% opacity rather than disappearing)
   const starScale = 0.82 + aboutProgress * 0.18;
   const starOpacity = 0.7 + aboutProgress * 0.3;
+
+  // Faster responsive transition on mobile, cinematic slow bloom on desktop
+  const starTransition = isMobile
+    ? "transform 650ms cubic-bezier(0.16, 1, 0.3, 1), opacity 650ms cubic-bezier(0.16, 1, 0.3, 1)"
+    : "transform 1000ms cubic-bezier(0.16, 1, 0.3, 1), opacity 1000ms cubic-bezier(0.16, 1, 0.3, 1)";
 
   return (
     <main className="relative min-h-screen w-full bg-[#FFFFFF] overflow-x-hidden">
@@ -396,7 +418,7 @@ export default function Home() {
 
         {/* Layer 2: Center Portfolio Typography */}
         <div className="relative z-10 flex h-full w-full items-center justify-center pointer-events-none">
-          <div className="relative aspect-video shrink-0 w-[195vw] sm:w-[170vw] md:w-[145vw] lg:w-[max(120vw,160dvh)] xl:w-[max(100vw,175dvh)] max-w-none select-none transition-all duration-300">
+          <div className="relative aspect-video shrink-0 w-[218vw] sm:w-[175vw] md:w-[145vw] lg:w-[max(120vw,160dvh)] xl:w-[max(100vw,175dvh)] max-w-none select-none transition-all duration-300 translate-x-[2.8vw] sm:translate-x-[1.5vw] md:translate-x-[1.2vw]">
             {PORTFOLIO_LAYERS.map((layer) => (
               <div
                 key={layer.id}
@@ -437,7 +459,10 @@ export default function Home() {
         className="relative z-20 w-full bg-[#FFFFFF] overflow-visible"
       >
         {/* 16:9 Stage Matching Reference Composition */}
-        <div className="relative mx-auto w-full max-w-[1920px] aspect-video select-none">
+        <div
+          id="about-stage"
+          className="relative mx-auto w-full max-w-[1920px] aspect-video select-none"
+        >
           {/* Layer 1: "About Me *" Large Blue Title */}
           <div className="pointer-events-none absolute inset-0 z-10 -translate-y-[2%] sm:translate-y-0">
             <Image
@@ -455,8 +480,7 @@ export default function Home() {
             style={{
               transform: `translate3d(${leftStarTransX}%, ${leftStarTransY}%, 0) scale(${starScale})`,
               opacity: starOpacity,
-              transition:
-                "transform 1000ms cubic-bezier(0.16, 1, 0.3, 1), opacity 1000ms cubic-bezier(0.16, 1, 0.3, 1)",
+              transition: starTransition,
             }}
             className="pointer-events-none absolute left-[11.5%] top-[52%] z-[15] w-[39%] aspect-video will-change-transform"
           >
@@ -502,8 +526,7 @@ export default function Home() {
             style={{
               transform: `translate3d(${rightStarTransX}%, ${rightStarTransY}%, 0) scale(${starScale})`,
               opacity: starOpacity,
-              transition:
-                "transform 1000ms cubic-bezier(0.16, 1, 0.3, 1), opacity 1000ms cubic-bezier(0.16, 1, 0.3, 1)",
+              transition: starTransition,
             }}
             className="pointer-events-none absolute left-[45.5%] top-[68.5%] z-40 w-[39%] aspect-video will-change-transform"
           >
@@ -592,7 +615,7 @@ export default function Home() {
 
           <SocialAndActionButtons isMobile />
 
-          <div className="mt-1 flex flex-wrap justify-between gap-4">
+          <div className="mt-0.5 flex flex-wrap justify-between gap-4">
             <div className="flex flex-col text-sm leading-snug">
               <span className="font-bold text-[#4784FF]">
                 Mobile App Developer
