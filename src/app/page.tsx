@@ -533,6 +533,12 @@ export default function Home() {
 
       {/* Technical Skills Section */}
       <TechnicalSkillsSection />
+
+      {/* Plain White Section Below Technical Skills & Tools to Test Scrolling */}
+      <section
+        aria-label="Blank Scroll Test Section"
+        className="min-h-screen w-full bg-[#FFFFFF]"
+      />
     </main>
   );
 }

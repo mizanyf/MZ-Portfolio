@@ -1,8 +1,22 @@
 "use client";
 
-import React from "react";
-import Image from "next/image";
+import React, { useEffect, useRef, useState } from "react";
+import Image, { type StaticImageData } from "next/image";
 import assetsLancipImg from "../../assets/assetslancip.png";
+import assetsKiriImg from "../../assets/landinpages/assetskiri.png";
+import assetsKananImg from "../../assets/landinpages/assetskanan.png";
+import toolsTitleImg from "../../public/assets/tools/Tools.png";
+import spreedsheetImg from "../../public/assets/tools/Spreedsheet.png";
+import slidesImg from "../../public/assets/tools/Slides.png";
+import antigravityImg from "../../public/assets/tools/Antigravity.png";
+import figmaImg from "../../public/assets/tools/Figma.png";
+import githubImg from "../../public/assets/tools/Github.png";
+import canvaImg from "../../public/assets/tools/Canva.png";
+import chatgptImg from "../../public/assets/tools/Chatgpt.png";
+import gdocsImg from "../../public/assets/tools/Gdocs.png";
+import vscodeImg from "../../public/assets/tools/Vscode.png";
+import capcutImg from "../../public/assets/tools/Capcut.png";
+import stitchImg from "../../public/assets/tools/Stitch.png";
 
 type TechName =
   | "Dart"
@@ -20,34 +34,156 @@ type TechName =
   | "TiDB"
   | "Supabase";
 
+interface TechItemConfig {
+  name: TechName;
+  /** Random initial tilt angle (degrees) for each framework logo */
+  baseTiltDeg: number;
+  /** Star-like calm idle animation class */
+  idleAnimClass: "animate-about-star-back" | "animate-about-star-front";
+  /** Staggered idle animation delay (ms) */
+  delayMs: number;
+  /** Random/varied subtle scroll rotation factor */
+  scrollRotateFactor: number;
+  /** Max scroll rotation clamp (deg) */
+  maxRotateDeg: number;
+}
+
 interface SkillCategory {
   id: string;
   title: string;
-  description: string;
-  items: TechName[];
+  items: TechItemConfig[];
 }
 
 const SKILL_CATEGORIES: SkillCategory[] = [
   {
     id: "mobile-dev",
     title: "Mobile App Development",
-    description:
-      "Cross-platform mobile applications with native performance and modern UI.",
-    items: ["Dart", "Flutter"],
+    items: [
+      {
+        name: "Dart",
+        baseTiltDeg: -11,
+        idleAnimClass: "animate-about-star-back",
+        delayMs: 0,
+        scrollRotateFactor: 0.019,
+        maxRotateDeg: 11,
+      },
+      {
+        name: "Flutter",
+        baseTiltDeg: 10,
+        idleAnimClass: "animate-about-star-front",
+        delayMs: 400,
+        scrollRotateFactor: -0.021,
+        maxRotateDeg: 12,
+      },
+    ],
   },
   {
     id: "frontend-dev",
     title: "Frontend Development",
-    description:
-      "Responsive, interactive, and accessible web interfaces built with modern frameworks.",
-    items: ["HTML", "CSS", "JavaScript", "React", "Next.js", "Tailwind CSS"],
+    items: [
+      {
+        name: "HTML",
+        baseTiltDeg: -10,
+        idleAnimClass: "animate-about-star-back",
+        delayMs: 100,
+        scrollRotateFactor: 0.017,
+        maxRotateDeg: 11,
+      },
+      {
+        name: "CSS",
+        baseTiltDeg: 8,
+        idleAnimClass: "animate-about-star-front",
+        delayMs: 450,
+        scrollRotateFactor: -0.022,
+        maxRotateDeg: 12,
+      },
+      {
+        name: "JavaScript",
+        baseTiltDeg: -11,
+        idleAnimClass: "animate-about-star-back",
+        delayMs: 250,
+        scrollRotateFactor: 0.02,
+        maxRotateDeg: 12,
+      },
+      {
+        name: "React",
+        baseTiltDeg: 9,
+        idleAnimClass: "animate-about-star-front",
+        delayMs: 600,
+        scrollRotateFactor: -0.018,
+        maxRotateDeg: 11,
+      },
+      {
+        name: "Next.js",
+        baseTiltDeg: -8,
+        idleAnimClass: "animate-about-star-back",
+        delayMs: 300,
+        scrollRotateFactor: 0.015,
+        maxRotateDeg: 10,
+      },
+      {
+        name: "Tailwind CSS",
+        baseTiltDeg: 11,
+        idleAnimClass: "animate-about-star-front",
+        delayMs: 750,
+        scrollRotateFactor: -0.023,
+        maxRotateDeg: 13,
+      },
+    ],
   },
   {
     id: "backend-db",
     title: "Backend Development & Database",
-    description:
-      "Scalable server-side architecture, RESTful APIs, and reliable database management.",
-    items: ["PHP", "Laravel", "MySQL", "MariaDB", "TiDB", "Supabase"],
+    items: [
+      {
+        name: "PHP",
+        baseTiltDeg: -9,
+        idleAnimClass: "animate-about-star-front",
+        delayMs: 150,
+        scrollRotateFactor: -0.019,
+        maxRotateDeg: 11,
+      },
+      {
+        name: "Laravel",
+        baseTiltDeg: 10,
+        idleAnimClass: "animate-about-star-back",
+        delayMs: 500,
+        scrollRotateFactor: 0.022,
+        maxRotateDeg: 12,
+      },
+      {
+        name: "MySQL",
+        baseTiltDeg: -10,
+        idleAnimClass: "animate-about-star-front",
+        delayMs: 200,
+        scrollRotateFactor: -0.016,
+        maxRotateDeg: 10,
+      },
+      {
+        name: "MariaDB",
+        baseTiltDeg: 9,
+        idleAnimClass: "animate-about-star-back",
+        delayMs: 650,
+        scrollRotateFactor: 0.021,
+        maxRotateDeg: 12,
+      },
+      {
+        name: "TiDB",
+        baseTiltDeg: -11,
+        idleAnimClass: "animate-about-star-front",
+        delayMs: 350,
+        scrollRotateFactor: -0.02,
+        maxRotateDeg: 12,
+      },
+      {
+        name: "Supabase",
+        baseTiltDeg: 10,
+        idleAnimClass: "animate-about-star-back",
+        delayMs: 800,
+        scrollRotateFactor: 0.018,
+        maxRotateDeg: 11,
+      },
+    ],
   },
 ];
 
@@ -163,21 +299,22 @@ function OfficialTechLogo({ name }: { name: TechName }) {
     case "React":
       return (
         <svg viewBox="0 0 128 128" className="h-full w-full" aria-hidden="true">
-          <circle cx="64" cy="64" r="11.4" fill="#61DAFB" />
-          <g fill="none" stroke="#61DAFB" strokeWidth="5.5">
-            <ellipse cx="64" cy="64" rx="54" ry="20.6" />
+          <rect width="112" height="112" x="8" y="8" rx="26" fill="#20232A" />
+          <circle cx="64" cy="64" r="9.2" fill="#61DAFB" />
+          <g fill="none" stroke="#61DAFB" strokeWidth="4.6">
+            <ellipse cx="64" cy="64" rx="42" ry="16" />
             <ellipse
               cx="64"
               cy="64"
-              rx="54"
-              ry="20.6"
+              rx="42"
+              ry="16"
               transform="rotate(60 64 64)"
             />
             <ellipse
               cx="64"
               cy="64"
-              rx="54"
-              ry="20.6"
+              rx="42"
+              ry="16"
               transform="rotate(120 64 64)"
             />
           </g>
@@ -199,9 +336,10 @@ function OfficialTechLogo({ name }: { name: TechName }) {
     case "Tailwind CSS":
       return (
         <svg viewBox="0 0 128 128" className="h-full w-full" aria-hidden="true">
+          <rect width="112" height="112" x="8" y="8" rx="26" fill="#0F172A" />
           <path
-            fill="#06B6D4"
-            d="M64 32c-15.5 0-25.2 7.7-29 23.2 5.8-7.7 12.6-10.6 20.3-8.7 4.4 1.1 7.6 4.3 11.1 7.8 5.7 5.8 12.3 12.5 26.6 12.5 15.5 0 25.2-7.7 29-23.2-5.8 7.7-12.6 10.6-20.3 8.7-4.4-1.1-7.6-4.3-11.1-7.8C84.9 38.7 78.3 32 64 32zM35 66.8C19.5 66.8 9.8 74.5 6 90c5.8-7.7 12.6-10.6 20.3-8.7 4.4 1.1 7.6 4.3 11.1 7.8C43.1 94.9 49.7 101.6 64 101.6c15.5 0 25.2-7.7 29-23.2-5.8 7.7-12.6 10.6-20.3 8.7-4.4-1.1-7.6-4.3-11.1-7.8-5.7-5.8-12.3-12.5-26.6-12.5z"
+            fill="#38BDF8"
+            d="M64 38c-12.4 0-20.2 6.2-23.2 18.5 4.6-6.2 10.1-8.5 16.2-7 3.5.9 6.1 3.4 8.9 6.2 4.6 4.6 9.8 10 21.3 10 12.4 0 20.2-6.2 23.2-18.5-4.6 6.2-10.1 8.5-16.2 7-3.5-.9-6.1-3.4-8.9-6.2C80.7 43.4 75.5 38 64 38zM40.8 65.8c-12.4 0-20.2 6.2-23.2 18.5 4.6-6.2 10.1-8.5 16.2-7 3.5.9 6.1 3.4 8.9 6.2 4.6 4.6 9.8 10 21.3 10 12.4 0 20.2-6.2 23.2-18.5-4.6 6.2-10.1 8.5-16.2 7-3.5-.9-6.1-3.4-8.9-6.2-4.6-4.6-9.8-10-21.3-10z"
           />
         </svg>
       );
@@ -209,7 +347,7 @@ function OfficialTechLogo({ name }: { name: TechName }) {
     case "PHP":
       return (
         <svg viewBox="0 0 128 128" className="h-full w-full" aria-hidden="true">
-          <ellipse cx="64" cy="64" rx="58" ry="32" fill="#777BB4" />
+          <ellipse cx="64" cy="64" rx="58" ry="34" fill="#777BB4" />
           <path
             fill="#FFFFFF"
             d="M32.5 76.5l5.4-27.5h13.2c5.8 0 9.6 3.3 8.5 9.1-1.2 6.2-5.8 9.6-12.1 9.6h-6.1l-1.7 8.8h-7.2zm10.2-14.3h4.6c2.9 0 4.9-1.6 5.4-4.3.5-2.6-1-3.9-3.9-3.9h-4.5l-1.6 8.2zm20.1 14.3l6.8-34.5h7.1l-1.9 9.7h5.9c5.3 0 8.1 2.8 7.1 7.9l-3.3 16.9h-7.2l3-15.3c.5-2.4-.4-3.5-2.8-3.5h-4.9l-3.7 18.8h-6.1zm26.9 7l6.8-34.5h13.2c5.8 0 9.6 3.3 8.5 9.1-1.2 6.2-5.8 9.6-12.1 9.6h-6.1l-3.1 15.8h-7.2zm10.2-21.3h4.6c2.9 0 4.9-1.6 5.4-4.3.5-2.6-1-3.9-3.9-3.9h-4.5l-1.6 8.2z"
@@ -220,13 +358,14 @@ function OfficialTechLogo({ name }: { name: TechName }) {
     case "Laravel":
       return (
         <svg viewBox="0 0 128 128" className="h-full w-full" aria-hidden="true">
+          <rect width="112" height="112" x="8" y="8" rx="26" fill="#FF2D20" />
           <path
             fill="none"
-            stroke="#FF2D20"
-            strokeWidth="5.2"
+            stroke="#FFFFFF"
+            strokeWidth="4.6"
             strokeLinecap="round"
             strokeLinejoin="round"
-            d="M22 34l21-12 21 12v46l21-12V44l21-12 20 12v24L64 104 22 80V34zm21 12L22 34m21 12l21-12m-21 12v46m42-34l21-12m-21 12l-21-12m21 12v24m-21 12l21-12"
+            d="M30 42l17-10 17 10v36l17-10V50l17-10 16 10v19L64 97 30 78V42zm17 10L30 42m17 10l17-10m-17 10v36m34-26l17-10m-17 10l-17-10m17 10v19m-17 9l17-10"
           />
         </svg>
       );
@@ -234,18 +373,18 @@ function OfficialTechLogo({ name }: { name: TechName }) {
     case "MySQL":
       return (
         <svg viewBox="0 0 128 128" className="h-full w-full" aria-hidden="true">
-          {/* MySQL Dolphin Silhouette & Brand Typography */}
+          <rect width="112" height="112" x="8" y="8" rx="26" fill="#FFFFFF" />
           <path
             fill="#00758F"
-            d="M93.5 58.2c-4.2-11.2-14.2-24.8-28.4-32.6-4.7-2.6-10.3-4.8-14.7-4.2-2.2.3-3.1 2-1.8 4.6 2.1 4.2 5.9 9.1 7.8 14.3-6.4-2.1-14.5-1.9-20.1 1.7-3.4 2.2-5.1 5.6-3.9 8.4 1.1 2.5 4.2 3.3 7.6 3.1 4.6-.3 9.7-.9 14.2.9 3.6 1.5 7 4.7 9.4 8.7-4.6 1.3-8.9 4.5-10.6 8.9-.8 2.1-.6 4.1 1.2 4.6 2 .5 4.1-1.3 6.1-2.8 3.2-2.4 7-3.6 11-2.5 5.4 1.5 10.6 6.4 15.1 11.7 1.8 2.1 3.7 1.2 3.2-1.4-.9-4.7-3.6-9.8-6.4-13.9 5.5.4 11.2-.2 15.1-2.8 2.1-1.4 2.2-3.4-.3-4.6-2.9-1.4-6-1.4-8.5-2.1z"
+            d="M90.5 56.2c-3.8-10.2-12.8-22.4-25.6-29.4-4.2-2.3-9.3-4.3-13.2-3.8-2 .3-2.8 1.8-1.6 4.1 1.9 3.8 5.3 8.2 7 12.9-5.8-1.9-13.1-1.7-18.1 1.5-3.1 2-4.6 5.1-3.5 7.6 1 2.3 3.8 3 6.8 2.8 4.1-.3 8.7-.8 12.8.8 3.2 1.4 6.3 4.2 8.5 7.8-4.1 1.2-8 4.1-9.5 8-.7 1.9-.5 3.7 1.1 4.1 1.8.5 3.7-1.2 5.5-2.5 2.9-2.2 6.3-3.2 9.9-2.3 4.9 1.4 9.5 5.8 13.6 10.5 1.6 1.9 3.3 1.1 2.9-1.3-.8-4.2-3.2-8.8-5.8-12.5 5 .4 10.1-.2 13.6-2.5 1.9-1.3 2-3.1-.3-4.1-2.6-1.3-5.4-1.3-7.6-1.9z"
           />
           <text
             x="64"
-            y="108"
+            y="102"
             textAnchor="middle"
             fontFamily="Arial, sans-serif"
             fontWeight="800"
-            fontSize="24"
+            fontSize="22"
             fill="#00758F"
           >
             My
@@ -257,19 +396,19 @@ function OfficialTechLogo({ name }: { name: TechName }) {
     case "MariaDB":
       return (
         <svg viewBox="0 0 128 128" className="h-full w-full" aria-hidden="true">
-          {/* MariaDB Sea Lion Emblem */}
+          <rect width="112" height="112" x="8" y="8" rx="26" fill="#FFFFFF" />
           <path
             fill="#003545"
-            d="M22 76c11-4 22-14 29-27 5-9 9-19 17-24 6-4 14-3 19 1 3 2 7 3 11 2 4-1 7 1 7 4 0 4-4 8-8 11-6 4-10 11-11 19-1 9 2 18 8 24 4 4 10 6 15 8-14 4-29 1-41-6-7 6-17 9-27 8-7-1-14-4-19-10v-10z"
+            d="M26 72c10-3.6 19.8-12.6 26.1-24.3 4.5-8.1 8.1-17.1 15.3-21.6 5.4-3.6 12.6-2.7 17.1.9 2.7 1.8 6.3 2.7 9.9 1.8 3.6-.9 6.3.9 6.3 3.6 0 3.6-3.6 7.2-7.2 9.9-5.4 3.6-9 9.9-9.9 17.1-.9 8.1 1.8 16.2 7.2 21.6 3.6 3.6 9 5.4 13.5 7.2-12.6 3.6-26.1.9-36.9-5.4-6.3 5.4-15.3 8.1-24.3 7.2-6.3-.9-12.6-3.6-17.1-9v-9z"
           />
-          <circle cx="75" cy="30" r="2.5" fill="#FFFFFF" />
+          <circle cx="73.5" cy="30.5" r="2.3" fill="#FFFFFF" />
           <text
             x="64"
-            y="110"
+            y="103"
             textAnchor="middle"
             fontFamily="Arial, sans-serif"
             fontWeight="700"
-            fontSize="20"
+            fontSize="18.5"
             fill="#003545"
           >
             Maria<tspan fill="#C0765A">DB</tspan>
@@ -280,7 +419,6 @@ function OfficialTechLogo({ name }: { name: TechName }) {
     case "TiDB":
       return (
         <svg viewBox="0 0 128 128" className="h-full w-full" aria-hidden="true">
-          {/* Official TiDB Red Hexagonal Cube with White 'T' & 'i' */}
           <polygon
             points="64,10 110,36.5 110,91.5 64,118 18,91.5 18,36.5"
             fill="#E31B23"
@@ -296,28 +434,66 @@ function OfficialTechLogo({ name }: { name: TechName }) {
     case "Supabase":
       return (
         <svg viewBox="0 0 128 128" className="h-full w-full" aria-hidden="true">
+          <rect width="112" height="112" x="8" y="8" rx="26" fill="#18181B" />
           <path
             fill="#249361"
-            d="M71.7 115.3c-2.9 3.6-8.7 1.6-8.8-3l-1-60.8h41c7.4 0 11.6 8.6 7 14.4L71.7 115.3z"
+            d="M70.2 104.5c-2.3 2.9-7 1.3-7.1-2.4l-.8-48.6h32.8c5.9 0 9.3 6.9 5.6 11.5L70.2 104.5z"
           />
           <path
             fill="#3ECF8E"
-            d="M56.3 12.7c2.9-3.6 8.7-1.6 8.8 3l.5 60.8H25.1c-7.4 0-11.6-8.6-7-14.4L56.3 12.7z"
+            d="M57.8 23.5c2.3-2.9 7-1.3 7.1 2.4l.4 48.6H32.9c-5.9 0-9.3-6.9-5.6-11.5L57.8 23.5z"
           />
         </svg>
       );
   }
 }
 
-function TechItemCard({ name }: { name: TechName }) {
+function FloatingTechItem({
+  item,
+  isLarge = false,
+  scrollDeltaY,
+}: {
+  item: TechItemConfig;
+  isLarge?: boolean;
+  scrollDeltaY: number;
+}) {
+  const rawRotation = scrollDeltaY * item.scrollRotateFactor;
+  const clampedScrollRotation = Math.max(
+    -item.maxRotateDeg,
+    Math.min(item.maxRotateDeg, rawRotation)
+  );
+
   return (
-    <div className="group flex w-full max-w-[125px] flex-col items-center justify-center gap-2.5 rounded-2xl border border-[#DCE9FF] bg-white/80 p-3.5 sm:p-4 text-center shadow-[0_4px_18px_rgba(71,132,255,0.06)] backdrop-blur-xs transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-105 hover:border-[#4784FF] hover:bg-white hover:shadow-[0_10px_28px_rgba(71,132,255,0.16)]">
-      <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center transition-transform duration-300 ease-out group-hover:scale-110">
-        <OfficialTechLogo name={name} />
+    <div
+      style={{
+        transform: `rotate(${clampedScrollRotation}deg)`,
+      }}
+      className="group flex flex-col items-center justify-center p-2 text-center transition-transform duration-500 ease-out will-change-transform"
+    >
+      {/* Inner Star-Like Calm Breathing Layer */}
+      <div
+        style={{ animationDelay: `${item.delayMs}ms` }}
+        className={`flex flex-col items-center justify-center ${item.idleAnimClass}`}
+      >
+        {/* Tilted Floating Logo with Blue Drop-Shadow Behind It (Tools Concept) */}
+        <div
+          style={{
+            transform: `rotate(${item.baseTiltDeg}deg)`,
+          }}
+          className={`flex items-center justify-center drop-shadow-[0_12px_20px_rgba(71,132,255,0.42)] transition-transform duration-300 ease-out group-hover:scale-112 ${
+            isLarge
+              ? "h-17 w-17 sm:h-21 sm:w-21"
+              : "h-13 w-13 sm:h-15 sm:w-15"
+          }`}
+        >
+          <OfficialTechLogo name={item.name} />
+        </div>
+
+        {/* Framework / Technology Name Below Logo */}
+        <span className="font-poppins mt-3 text-xs sm:text-[13px] font-semibold tracking-tight text-[#193A75] whitespace-nowrap drop-shadow-[0_2px_8px_rgba(71,132,255,0.18)] transition-colors duration-200 group-hover:text-[#4784FF]">
+          {item.name}
+        </span>
       </div>
-      <span className="font-poppins text-xs sm:text-[13px] font-semibold tracking-tight text-[#193A75] transition-colors duration-200 group-hover:text-[#4784FF]">
-        {name}
-      </span>
     </div>
   );
 }
@@ -329,36 +505,70 @@ function SkillCategoryCard({
   category: SkillCategory;
   isThirdCard: boolean;
 }) {
+  const cardRef = useRef<HTMLDivElement | null>(null);
+  const [scrollDeltaY, setScrollDeltaY] = useState<number>(0);
   const isTwoItems = category.items.length === 2;
+
+  useEffect(() => {
+    let rafId = 0;
+
+    const updateCardScroll = () => {
+      const el = cardRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight || 1;
+      const cardCenterY = rect.top + rect.height / 2;
+      const viewportCenterY = vh * 0.5;
+      setScrollDeltaY(cardCenterY - viewportCenterY);
+    };
+
+    const onScrollOrResize = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(updateCardScroll);
+    };
+
+    rafId = requestAnimationFrame(updateCardScroll);
+
+    window.addEventListener("scroll", onScrollOrResize, { passive: true });
+    window.addEventListener("resize", onScrollOrResize, { passive: true });
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("scroll", onScrollOrResize);
+      window.removeEventListener("resize", onScrollOrResize);
+    };
+  }, []);
 
   return (
     <div
+      ref={cardRef}
       className={`flex flex-col items-center justify-between rounded-3xl border border-white/90 bg-white/65 p-6 sm:p-8 text-center ring-1 ring-[#DCE9FF] shadow-[0_12px_40px_rgba(71,132,255,0.10)] backdrop-blur-md backdrop-saturate-150 transition-all duration-300 hover:shadow-[0_16px_48px_rgba(71,132,255,0.16)] ${
         isThirdCard
           ? "md:col-span-2 md:mx-auto md:w-full md:max-w-[calc(50%-0.75rem)] lg:col-span-1 lg:max-w-none"
           : ""
       }`}
     >
-      {/* Category Header (Centered) */}
+      {/* Category Header (Centered, No Bio/Description Text) */}
       <div className="flex flex-col items-center text-center">
         <h3 className="font-poppins text-lg sm:text-xl font-bold text-[#4784FF]">
           {category.title}
         </h3>
-        <p className="font-poppins italic mt-1.5 max-w-xs text-xs sm:text-sm font-normal leading-relaxed text-[#527FD6]">
-          {category.description}
-        </p>
       </div>
 
-      {/* Symmetric Centered Logo Grid */}
+      {/* Neat Ordered Grid Inside Glassmorphism Box with Random Tilt & Scroll Rotation */}
       <div
-        className={`mt-6 mb-auto grid w-full justify-items-center gap-3.5 sm:gap-4 ${
+        className={`mt-6 mb-auto grid w-full justify-items-center items-center ${
           isTwoItems
-            ? "grid-cols-2 max-w-[270px] mx-auto my-auto py-4"
-            : "grid-cols-2 sm:grid-cols-3"
+            ? "grid-cols-2 gap-6 sm:gap-8 max-w-[260px] mx-auto my-auto py-6"
+            : "grid-cols-3 gap-x-3 gap-y-7 sm:gap-x-5 sm:gap-y-8 my-auto py-3"
         }`}
       >
-        {category.items.map((tech) => (
-          <TechItemCard key={tech} name={tech} />
+        {category.items.map((techItem) => (
+          <FloatingTechItem
+            key={techItem.name}
+            item={techItem}
+            isLarge={isTwoItems}
+            scrollDeltaY={scrollDeltaY}
+          />
         ))}
       </div>
     </div>
@@ -371,193 +581,428 @@ function ModernBlueWaveBackdrop() {
       aria-hidden="true"
       className="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none"
     >
-      {/* Left Modern Flowing Blue-Cyan Gradient Wave (Landing Page Inspired) */}
-      <div className="absolute -left-16 sm:-left-10 lg:-left-4 top-0 h-full w-[58vw] max-w-[680px] animate-wave-left opacity-95">
-        <svg
-          viewBox="0 0 600 1000"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-full w-full object-cover object-left"
-          preserveAspectRatio="none"
-        >
-          <defs>
-            <linearGradient
-              id="skillsWaveLeftPrimary"
-              x1="0%"
-              y1="0%"
-              x2="100%"
-              y2="100%"
-            >
-              <stop offset="0%" stopColor="#2563EB" stopOpacity="0.65" />
-              <stop offset="40%" stopColor="#4784FF" stopOpacity="0.45" />
-              <stop offset="75%" stopColor="#38BDF8" stopOpacity="0.28" />
-              <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
-            </linearGradient>
-
-            <linearGradient
-              id="skillsWaveLeftCyan"
-              x1="0%"
-              y1="30%"
-              x2="95%"
-              y2="85%"
-            >
-              <stop offset="0%" stopColor="#0EA5E9" stopOpacity="0.52" />
-              <stop offset="45%" stopColor="#38BDF8" stopOpacity="0.38" />
-              <stop offset="80%" stopColor="#7DD3FC" stopOpacity="0.18" />
-              <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
-            </linearGradient>
-
-            <linearGradient
-              id="skillsWaveLeftCrest"
-              x1="0%"
-              y1="10%"
-              x2="90%"
-              y2="90%"
-            >
-              <stop offset="0%" stopColor="#1D4ED8" stopOpacity="0.45" />
-              <stop offset="50%" stopColor="#4784FF" stopOpacity="0.28" />
-              <stop offset="100%" stopColor="#BAE6FD" stopOpacity="0" />
-            </linearGradient>
-
-            <filter
-              id="skillsBlurSoftLeft"
-              x="-25%"
-              y="-25%"
-              width="150%"
-              height="150%"
-            >
-              <feGaussianBlur stdDeviation="28" />
-            </filter>
-
-            <filter
-              id="skillsBlurSilkLeft"
-              x="-15%"
-              y="-15%"
-              width="130%"
-              height="130%"
-            >
-              <feGaussianBlur stdDeviation="12" />
-            </filter>
-          </defs>
-
-          {/* Ambient Outer Mesh Wave */}
-          <path
-            d="M-80 20 C160 80, 320 220, 210 470 C110 700, 310 820, 440 990 L-80 1000 Z"
-            fill="url(#skillsWaveLeftPrimary)"
-            filter="url(#skillsBlurSoftLeft)"
-          />
-
-          {/* Silky Middle Cyan-Blue Ribbon Fold */}
-          <path
-            d="M-60 120 C140 190, 250 340, 150 560 C60 760, 230 870, 360 1000 L-60 1000 Z"
-            fill="url(#skillsWaveLeftCyan)"
-            filter="url(#skillsBlurSilkLeft)"
-          />
-
-          {/* Sharp Modern Fluid Highlight Crest */}
-          <path
-            d="M-40 0 C180 70, 240 240, 120 440 C10 620, 160 790, 290 960 C170 860, 30 710, 80 490 C130 280, 80 130, -40 0 Z"
-            fill="url(#skillsWaveLeftCrest)"
-            filter="url(#skillsBlurSilkLeft)"
-          />
-        </svg>
+      {/* Left Subtle Modern Silk Wave (Directly from Landing Pages Assets, Thin & Elegant) */}
+      <div className="pointer-events-none absolute top-0 -left-12 sm:-left-8 lg:left-0 h-full w-[50vw] max-w-[720px] select-none animate-wave-left">
+        <Image
+          src={assetsKiriImg}
+          alt=""
+          fill
+          unoptimized
+          sizes="(max-width: 768px) 50vw, 720px"
+          className="object-contain object-left mix-blend-multiply opacity-55 sm:opacity-70 select-none"
+        />
       </div>
 
-      {/* Right Modern Flowing Blue Gradient Wave (Landing Page Inspired) */}
-      <div className="absolute -right-16 sm:-right-10 lg:-right-4 top-0 h-full w-[58vw] max-w-[680px] animate-wave-right opacity-95">
-        <svg
-          viewBox="0 0 600 1000"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-full w-full object-cover object-right"
-          preserveAspectRatio="none"
-        >
-          <defs>
-            <linearGradient
-              id="skillsWaveRightPrimary"
-              x1="100%"
-              y1="0%"
-              x2="0%"
-              y2="100%"
-            >
-              <stop offset="0%" stopColor="#1D4ED8" stopOpacity="0.6" />
-              <stop offset="40%" stopColor="#4784FF" stopOpacity="0.44" />
-              <stop offset="75%" stopColor="#60A5FA" stopOpacity="0.24" />
-              <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
-            </linearGradient>
-
-            <linearGradient
-              id="skillsWaveRightSky"
-              x1="100%"
-              y1="25%"
-              x2="10%"
-              y2="90%"
-            >
-              <stop offset="0%" stopColor="#38BDF8" stopOpacity="0.5" />
-              <stop offset="50%" stopColor="#4784FF" stopOpacity="0.34" />
-              <stop offset="85%" stopColor="#93C5FD" stopOpacity="0.16" />
-              <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
-            </linearGradient>
-
-            <linearGradient
-              id="skillsWaveRightCrest"
-              x1="100%"
-              y1="15%"
-              x2="15%"
-              y2="85%"
-            >
-              <stop offset="0%" stopColor="#2563EB" stopOpacity="0.46" />
-              <stop offset="55%" stopColor="#38BDF8" stopOpacity="0.26" />
-              <stop offset="100%" stopColor="#E0F2FE" stopOpacity="0" />
-            </linearGradient>
-
-            <filter
-              id="skillsBlurSoftRight"
-              x="-25%"
-              y="-25%"
-              width="150%"
-              height="150%"
-            >
-              <feGaussianBlur stdDeviation="28" />
-            </filter>
-
-            <filter
-              id="skillsBlurSilkRight"
-              x="-15%"
-              y="-15%"
-              width="130%"
-              height="130%"
-            >
-              <feGaussianBlur stdDeviation="12" />
-            </filter>
-          </defs>
-
-          {/* Ambient Outer Right Wave */}
-          <path
-            d="M680 0 C430 70, 290 250, 390 500 C490 740, 310 860, 170 1000 L680 1000 Z"
-            fill="url(#skillsWaveRightPrimary)"
-            filter="url(#skillsBlurSoftRight)"
-          />
-
-          {/* Silky Inner Sky-Blue Wave Ribbon */}
-          <path
-            d="M660 90 C460 180, 350 360, 450 580 C540 780, 380 890, 250 1000 L660 1000 Z"
-            fill="url(#skillsWaveRightSky)"
-            filter="url(#skillsBlurSilkRight)"
-          />
-
-          {/* Fluid Modern Ribbon Crest */}
-          <path
-            d="M640 30 C430 110, 370 290, 480 490 C580 670, 430 830, 310 980 C430 870, 560 720, 520 510 C470 310, 520 150, 640 30 Z"
-            fill="url(#skillsWaveRightCrest)"
-            filter="url(#skillsBlurSilkRight)"
-          />
-        </svg>
+      {/* Right Subtle Modern Silk Wave (Directly from Landing Pages Assets, Thin & Elegant) */}
+      <div className="pointer-events-none absolute top-0 -right-12 sm:-right-8 lg:right-0 h-full w-[50vw] max-w-[720px] select-none animate-wave-right">
+        <Image
+          src={assetsKananImg}
+          alt=""
+          fill
+          unoptimized
+          sizes="(max-width: 768px) 50vw, 720px"
+          className="object-contain object-right mix-blend-multiply opacity-55 sm:opacity-70 select-none"
+        />
       </div>
 
-      {/* Top & Bottom Soft White Vignettes for Seamless Section Blending */}
-      <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#FFFFFF] via-[#FFFFFF]/75 to-transparent" />
-      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#FFFFFF] via-[#FFFFFF]/75 to-transparent" />
+      {/* Top & Bottom Soft White Vignettes for Seamless Smooth Blending */}
+      <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-[#FFFFFF] via-[#FFFFFF]/85 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#FFFFFF] via-[#FFFFFF]/85 to-transparent" />
+    </div>
+  );
+}
+
+interface FloatingToolItem {
+  id: string;
+  alt: string;
+  src: StaticImageData;
+  /** Wide, symmetrically balanced position and size classes on the 16:9 desktop stage */
+  positionClass: string;
+  /** Scale adjustment for mobile 2-column grid (compensates for transparent PNG canvas padding) */
+  mobileScaleClass?: string;
+  /** Mobile zigzag alignment ("left" | "right" | "center") */
+  mobileSide: "left" | "right" | "center";
+  /** Mobile organic indent class (e.g. "ml-2", "mr-6", etc.) */
+  mobileIndentClass: string;
+  /** Organic subtle tilt angle on mobile (degrees) */
+  mobileTiltDeg: number;
+  /** Which star-like calm idle animation to use */
+  idleAnimClass: "animate-about-star-back" | "animate-about-star-front";
+  /** Animation delay for organic staggered floating */
+  delayMs: number;
+  /** Unique scroll rotation speed factor (deg per px of scroll offset, varied & subtle) */
+  scrollRotateFactor: number;
+  /** Maximum rotation clamp in degrees so it never rotates too much */
+  maxRotateDeg: number;
+  /** Optional white rounded-square tile wrapper rotation (for ChatGPT & CapCut) */
+  tileRotationDeg?: number;
+}
+
+const FLOATING_TOOLS: FloatingToolItem[] = [
+  // Pair 1 (Top Outer — Wide Left & Right): Center X = 7.8% (Left) vs 92.2% (Right)
+  {
+    id: "spreadsheet",
+    alt: "Google Sheets",
+    src: spreedsheetImg,
+    positionClass: "left-[2.2%] top-[5.5%] w-[11.2%] aspect-[609/736]",
+    mobileSide: "left",
+    mobileIndentClass: "ml-2 sm:ml-4",
+    mobileTiltDeg: -9,
+    idleAnimClass: "animate-about-star-back",
+    delayMs: 0,
+    scrollRotateFactor: 0.018,
+    maxRotateDeg: 11,
+  },
+  {
+    id: "slides",
+    alt: "Google Slides",
+    src: slidesImg,
+    positionClass: "left-[79.9%] top-[-4.5%] w-[24.6%] aspect-[1097/906]",
+    mobileScaleClass: "scale-[1.75]",
+    mobileSide: "right",
+    mobileIndentClass: "mr-2 sm:mr-4",
+    mobileTiltDeg: 10,
+    idleAnimClass: "animate-about-star-front",
+    delayMs: 350,
+    scrollRotateFactor: -0.022,
+    maxRotateDeg: 13,
+  },
+
+  // Pair 2 (Middle Outer — Wide Left & Right): Center X = 9.3% (Left) vs 90.7% (Right)
+  {
+    id: "antigravity",
+    alt: "Antigravity",
+    src: antigravityImg,
+    positionClass: "left-[3.0%] top-[36.5%] w-[12.6%] aspect-square",
+    mobileSide: "left",
+    mobileIndentClass: "ml-7 sm:ml-9",
+    mobileTiltDeg: -11,
+    idleAnimClass: "animate-about-star-front",
+    delayMs: 700,
+    scrollRotateFactor: -0.015,
+    maxRotateDeg: 10,
+  },
+  {
+    id: "chatgpt",
+    alt: "ChatGPT",
+    src: chatgptImg,
+    positionClass: "left-[84.9%] top-[36.5%] w-[11.6%] aspect-square",
+    mobileSide: "right",
+    mobileIndentClass: "mr-1 sm:mr-3",
+    mobileTiltDeg: 8,
+    idleAnimClass: "animate-about-star-front",
+    delayMs: 150,
+    scrollRotateFactor: 0.021,
+    maxRotateDeg: 12,
+    tileRotationDeg: -14,
+  },
+
+  // Pair 3 (Middle Inner): Center X = 26.2% (Left) vs 73.8% (Right)
+  {
+    id: "figma",
+    alt: "Figma",
+    src: figmaImg,
+    positionClass: "left-[19.2%] top-[43.0%] w-[14.0%] aspect-square",
+    mobileScaleClass: "scale-[1.18]",
+    mobileSide: "left",
+    mobileIndentClass: "ml-1 sm:ml-3",
+    mobileTiltDeg: 12,
+    idleAnimClass: "animate-about-star-back",
+    delayMs: 200,
+    scrollRotateFactor: 0.024,
+    maxRotateDeg: 14,
+  },
+  {
+    id: "canva",
+    alt: "Canva",
+    src: canvaImg,
+    positionClass: "left-[66.9%] top-[43.0%] w-[13.8%] aspect-square",
+    mobileSide: "right",
+    mobileIndentClass: "mr-8 sm:mr-10",
+    mobileTiltDeg: -10,
+    idleAnimClass: "animate-about-star-back",
+    delayMs: 850,
+    scrollRotateFactor: -0.017,
+    maxRotateDeg: 11,
+  },
+
+  // Pair 4 (Bottom Outer — Wide Left & Right): Center X = 11.3% (Left) vs 88.7% (Right)
+  {
+    id: "gdocs",
+    alt: "Google Docs",
+    src: gdocsImg,
+    positionClass: "left-[-0.2%] top-[63.5%] w-[23.0%] aspect-[1346/906]",
+    mobileScaleClass: "scale-[1.75]",
+    mobileSide: "left",
+    mobileIndentClass: "ml-4 sm:ml-6",
+    mobileTiltDeg: -8,
+    idleAnimClass: "animate-about-star-back",
+    delayMs: 450,
+    scrollRotateFactor: -0.02,
+    maxRotateDeg: 12,
+  },
+  {
+    id: "stitch",
+    alt: "Stitch",
+    src: stitchImg,
+    positionClass: "left-[82.4%] top-[63.5%] w-[12.6%] aspect-square",
+    mobileSide: "right",
+    mobileIndentClass: "mr-3 sm:mr-5",
+    mobileTiltDeg: 11,
+    idleAnimClass: "animate-about-star-front",
+    delayMs: 950,
+    scrollRotateFactor: 0.016,
+    maxRotateDeg: 10,
+  },
+
+  // Pair 5 (Bottom Inner): Center X = 36.3% (Left) vs 63.7% (Right)
+  {
+    id: "vscode",
+    alt: "VS Code",
+    src: vscodeImg,
+    positionClass: "left-[29.2%] top-[64.5%] w-[14.2%] aspect-square",
+    mobileSide: "left",
+    mobileIndentClass: "ml-8 sm:ml-10",
+    mobileTiltDeg: -12,
+    idleAnimClass: "animate-about-star-front",
+    delayMs: 650,
+    scrollRotateFactor: 0.019,
+    maxRotateDeg: 12,
+  },
+  {
+    id: "capcut",
+    alt: "CapCut",
+    src: capcutImg,
+    positionClass: "left-[57.7%] top-[66.5%] w-[12.0%] aspect-square",
+    mobileSide: "right",
+    mobileIndentClass: "mr-4 sm:mr-6",
+    mobileTiltDeg: 9,
+    idleAnimClass: "animate-about-star-back",
+    delayMs: 300,
+    scrollRotateFactor: -0.023,
+    maxRotateDeg: 13,
+    tileRotationDeg: -9,
+  },
+
+  // Center: Center X = 50.0% (Desktop) / Left Zigzag (Mobile)
+  {
+    id: "github",
+    alt: "GitHub",
+    src: githubImg,
+    positionClass: "left-[38.0%] top-[43.5%] w-[24.0%] aspect-[1346/906]",
+    mobileScaleClass: "scale-[1.88]",
+    mobileSide: "left",
+    mobileIndentClass: "ml-3 sm:ml-5 pt-2",
+    mobileTiltDeg: -7,
+    idleAnimClass: "animate-about-star-front",
+    delayMs: 500,
+    scrollRotateFactor: 0.014,
+    maxRotateDeg: 9,
+  },
+];
+
+function ToolsShowcase() {
+  const stageRef = useRef<HTMLDivElement | null>(null);
+  const [scrollDeltaY, setScrollDeltaY] = useState<number>(0);
+
+  useEffect(() => {
+    let rafId = 0;
+
+    const updateScrollState = () => {
+      const el = stageRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight || 1;
+      const stageCenterY = rect.top + rect.height / 2;
+      const viewportCenterY = vh * 0.5;
+      setScrollDeltaY(stageCenterY - viewportCenterY);
+    };
+
+    const onScrollOrResize = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(updateScrollState);
+    };
+
+    rafId = requestAnimationFrame(updateScrollState);
+
+    window.addEventListener("scroll", onScrollOrResize, { passive: true });
+    window.addEventListener("resize", onScrollOrResize, { passive: true });
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("scroll", onScrollOrResize);
+      window.removeEventListener("resize", onScrollOrResize);
+    };
+  }, []);
+
+  return (
+    <div
+      ref={stageRef}
+      className="relative z-10 mt-6 sm:mt-8 lg:mt-10 mx-auto w-full max-w-[1780px] px-2 sm:px-4"
+    >
+      {/* Desktop & Tablet (>= md): Full-Width 16:9 Stage Spreading Icons Wide Left & Right */}
+      <div className="relative mx-auto hidden md:block w-full aspect-video select-none">
+        {/* Center "*Tools*" Title Asset (Moved Slightly Higher & Completely Still) */}
+        <div className="pointer-events-none absolute left-[11.0%] top-[-6.5%] z-10 w-[78.0%] aspect-[1920/1024]">
+          <Image
+            src={toolsTitleImg}
+            alt="Tools"
+            fill
+            unoptimized
+            sizes="(max-width: 1780px) 80vw, 1380px"
+            className="object-contain object-center select-none"
+          />
+        </div>
+
+        {/* Floating Tool Logos: Subtle Random Scroll Rotation */}
+        {FLOATING_TOOLS.map((tool) => {
+          const rawRotation = scrollDeltaY * tool.scrollRotateFactor;
+          const clampedRotation = Math.max(
+            -tool.maxRotateDeg,
+            Math.min(tool.maxRotateDeg, rawRotation)
+          );
+
+          return (
+            <div
+              key={tool.id}
+              style={{
+                transform: `rotate(${clampedRotation}deg)`,
+              }}
+              className={`absolute z-20 ${tool.positionClass} transition-transform duration-500 ease-out will-change-transform`}
+            >
+              {/* Inner Star-Like Calm Breathing/Rocking Layer */}
+              <div
+                style={{ animationDelay: `${tool.delayMs}ms` }}
+                className={`relative h-full w-full ${tool.idleAnimClass}`}
+              >
+                {tool.tileRotationDeg !== undefined ? (
+                  <div
+                    style={{
+                      transform: `rotate(${tool.tileRotationDeg}deg)`,
+                    }}
+                    className="relative h-full w-full overflow-hidden rounded-[23%] bg-white shadow-[0_14px_30px_rgba(71,132,255,0.40),0_4px_12px_rgba(71,132,255,0.22)] ring-1 ring-[#4784FF]/25 transition-transform duration-300 hover:scale-105"
+                  >
+                    <div
+                      style={{
+                        transform: `rotate(${-tool.tileRotationDeg}deg) scale(1.18)`,
+                      }}
+                      className="relative h-full w-full"
+                    >
+                      <Image
+                        src={tool.src}
+                        alt={tool.alt}
+                        fill
+                        unoptimized
+                        sizes="180px"
+                        className="object-contain object-center select-none"
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="relative h-full w-full drop-shadow-[0_14px_22px_rgba(71,132,255,0.42)] transition-transform duration-300 hover:scale-105">
+                    <Image
+                      src={tool.src}
+                      alt={tool.alt}
+                      fill
+                      unoptimized
+                      sizes="240px"
+                      className="object-contain object-center select-none"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Mobile (< md): Organic Alternating Zigzag Stream (Kanan - Kiri - Kanan - Kiri) */}
+      <div className="md:hidden flex flex-col items-center w-full pt-4 pb-14 select-none overflow-hidden">
+        {/* "*Tools*" Title Asset on Mobile */}
+        <div className="pointer-events-none relative w-[92%] max-w-[360px] aspect-[1920/1024] -mb-2">
+          <Image
+            src={toolsTitleImg}
+            alt="Tools"
+            fill
+            unoptimized
+            sizes="92vw"
+            className="object-contain object-center select-none"
+          />
+        </div>
+
+        {/* Alternating Winding List of Large Tool Icons with Organic Indents */}
+        <div className="flex flex-col w-full max-w-[350px] mx-auto px-4 -space-y-6 sm:-space-y-7 pt-4">
+          {FLOATING_TOOLS.map((tool) => {
+            const rawRotation = scrollDeltaY * tool.scrollRotateFactor;
+            const clampedRotation = Math.max(
+              -tool.maxRotateDeg,
+              Math.min(tool.maxRotateDeg, rawRotation)
+            );
+            const totalRotation = tool.mobileTiltDeg + clampedRotation;
+
+            const alignmentClass =
+              tool.mobileSide === "left"
+                ? "self-start"
+                : tool.mobileSide === "right"
+                ? "self-end"
+                : "self-center";
+
+            return (
+              <div
+                key={tool.id}
+                style={{
+                  transform: `rotate(${totalRotation}deg)`,
+                }}
+                className={`relative h-24 w-24 sm:h-28 sm:w-28 flex items-center justify-center transition-transform duration-500 ease-out will-change-transform ${alignmentClass} ${tool.mobileIndentClass}`}
+              >
+                <div
+                  style={{ animationDelay: `${tool.delayMs}ms` }}
+                  className={`relative h-full w-full ${tool.idleAnimClass}`}
+                >
+                  {tool.tileRotationDeg !== undefined ? (
+                    <div
+                      style={{
+                        transform: `rotate(${tool.tileRotationDeg}deg)`,
+                      }}
+                      className="relative h-full w-full overflow-hidden rounded-[23%] bg-white shadow-[0_14px_30px_rgba(71,132,255,0.40),0_4px_12px_rgba(71,132,255,0.22)] ring-1 ring-[#4784FF]/25"
+                    >
+                      <div
+                        style={{
+                          transform: `rotate(${-tool.tileRotationDeg}deg) scale(1.18)`,
+                        }}
+                        className="relative h-full w-full"
+                      >
+                        <Image
+                          src={tool.src}
+                          alt={tool.alt}
+                          fill
+                          unoptimized
+                          sizes="130px"
+                          className="object-contain object-center select-none"
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div
+                      className={`relative h-full w-full drop-shadow-[0_14px_22px_rgba(71,132,255,0.42)] ${
+                        tool.mobileScaleClass ?? ""
+                      }`}
+                    >
+                      <Image
+                        src={tool.src}
+                        alt={tool.alt}
+                        fill
+                        unoptimized
+                        sizes="150px"
+                        className="object-contain object-center select-none"
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }
@@ -608,6 +1053,9 @@ export default function TechnicalSkillsSection() {
           ))}
         </div>
       </div>
+
+      {/* Full-Width Tools Showcase Directly Below Technical Skills */}
+      <ToolsShowcase />
     </section>
   );
 }
