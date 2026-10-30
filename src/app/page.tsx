@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import assetsKiriImg from "../../assets/landinpages/assetskiri.png";
-import assetsKananImg from "../../assets/landinpages/assetskanan.png";
-import portofolioImg from "../../assets/landinpages/portofolio.png";
-import aboutMeTitleImg from "../../assets/aboutme/aboutme.png";
-import fotoMeImg from "../../assets/aboutme/fotome.png";
-import bintangImg from "../../assets/aboutme/bintang.png";
+import assetsKiriImg from "../../assets/landinpages/assetskiri.webp";
+import assetsKananImg from "../../assets/landinpages/assetskanan.webp";
+import portofolioImg from "../../assets/landinpages/portofolio.webp";
+import aboutMeTitleImg from "../../assets/aboutme/aboutme.webp";
+import fotoMeImg from "../../assets/aboutme/fotome.webp";
+import bintangImg from "../../assets/aboutme/bintang.webp";
 import TechnicalSkillsSection from "../components/TechnicalSkillsSection";
 
 const NAV_ITEMS = [
@@ -384,9 +384,13 @@ export default function Home() {
         id="home"
         className="relative flex h-dvh min-h-screen w-full items-center justify-center bg-[#FFFFFF] overflow-hidden"
       >
-        {/* Layer 1A: Left Wave Asset */}
+        {/* Layer 1A: Left Wave Asset (Tuned with max(-18vw, ...) and soft bottom white gradient fade) */}
         <div
-          style={{ left: "min(0px, calc(30vw - 55dvh))" }}
+          style={{
+            left: "max(-18vw, min(0px, calc(30vw - 55dvh)))",
+            maskImage: "linear-gradient(to bottom, black 55%, transparent 95%)",
+            WebkitMaskImage: "linear-gradient(to bottom, black 55%, transparent 95%)",
+          }}
           className="pointer-events-none absolute top-0 z-0 h-dvh w-[177.78dvh] select-none animate-wave-left"
         >
           <Image
@@ -400,9 +404,13 @@ export default function Home() {
           />
         </div>
 
-        {/* Layer 1B: Right Wave Asset */}
+        {/* Layer 1B: Right Wave Asset (Tuned with max(-18vw, ...) and soft bottom white gradient fade) */}
         <div
-          style={{ right: "min(0px, calc(30vw - 55dvh))" }}
+          style={{
+            right: "max(-18vw, min(0px, calc(30vw - 55dvh)))",
+            maskImage: "linear-gradient(to bottom, black 55%, transparent 95%)",
+            WebkitMaskImage: "linear-gradient(to bottom, black 55%, transparent 95%)",
+          }}
           className="pointer-events-none absolute top-0 z-0 h-dvh w-[177.78dvh] select-none animate-wave-right"
         >
           <Image
@@ -442,7 +450,7 @@ export default function Home() {
         {/* Smooth Gradient Transition Separating Landing Page & About Me */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-28 sm:h-40 md:h-52 bg-gradient-to-b from-transparent via-white/80 to-[#FFFFFF]"
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-32 sm:h-44 md:h-60 bg-gradient-to-b from-transparent via-white/80 via-white/95 to-[#FFFFFF]"
         />
       </section>
 

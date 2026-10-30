@@ -2,19 +2,19 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Image, { type StaticImageData } from "next/image";
-import assetsLancipImg from "../../assets/assetslancip.png";
-import toolsTitleImg from "../../public/assets/tools/Tools.png";
-import spreedsheetImg from "../../public/assets/tools/Spreedsheet.png";
-import slidesImg from "../../public/assets/tools/Slides.png";
-import antigravityImg from "../../public/assets/tools/Antigravity.png";
-import figmaImg from "../../public/assets/tools/Figma.png";
-import githubImg from "../../public/assets/tools/Github.png";
-import canvaImg from "../../public/assets/tools/Canva.png";
-import chatgptImg from "../../public/assets/tools/Chatgpt.png";
-import gdocsImg from "../../public/assets/tools/Gdocs.png";
-import vscodeImg from "../../public/assets/tools/Vscode.png";
-import capcutImg from "../../public/assets/tools/Capcut.png";
-import stitchImg from "../../public/assets/tools/Stitch.png";
+import assetsLancipImg from "../../assets/assetslancip.webp";
+import toolsTitleImg from "../../public/assets/tools/Tools.webp";
+import spreedsheetImg from "../../public/assets/tools/Spreedsheet.webp";
+import slidesImg from "../../public/assets/tools/Slides.webp";
+import antigravityImg from "../../public/assets/tools/Antigravity.webp";
+import figmaImg from "../../public/assets/tools/Figma.webp";
+import githubImg from "../../public/assets/tools/Github.webp";
+import canvaImg from "../../public/assets/tools/Canva.webp";
+import chatgptImg from "../../public/assets/tools/Chatgpt.webp";
+import gdocsImg from "../../public/assets/tools/Gdocs.webp";
+import vscodeImg from "../../public/assets/tools/Vscode.webp";
+import capcutImg from "../../public/assets/tools/Capcut.webp";
+import stitchImg from "../../public/assets/tools/Stitch.webp";
 
 type TechName =
   | "Dart"
@@ -977,7 +977,7 @@ export default function TechnicalSkillsSection() {
     >
       {/* Main Centered Content Container */}
       <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center text-center">
-        {/* Section Title with Official Sharp Star Asset (assetslancip.png) */}
+        {/* Section Title with Official Sharp Star Asset (assetslancip.webp) */}
         <div className="inline-flex items-center justify-center gap-1 sm:gap-2">
           <h2 className="font-poppins text-4xl sm:text-5xl md:text-6xl lg:text-[68px] font-bold tracking-tight text-[#4784FF] leading-none">
             Technical Skills
