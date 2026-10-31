@@ -466,6 +466,30 @@ export default function Home() {
         aria-label="About Me"
         className="relative z-20 w-full bg-[#FFFFFF] overflow-visible"
       >
+        {/* Ambient Moving Blue Gradients (Subtle Aesthetic Mesh: Right at Top, Left at Bottom) */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 overflow-hidden select-none z-0"
+        >
+          {/* Top-Right Ambient Floating Blue Glow ("gradasi biru kanan") */}
+          <div
+            className="animate-ambient-right absolute top-[2%] sm:top-[4%] md:top-[6%] -right-[20%] sm:-right-[12%] md:-right-[6%] lg:right-[0%] w-[320px] h-[320px] sm:w-[460px] sm:h-[460px] md:w-[600px] md:h-[600px] lg:w-[720px] lg:h-[720px] rounded-full blur-2xl sm:blur-3xl"
+            style={{
+              background:
+                "radial-gradient(circle at center, rgba(71, 132, 255, 0.18) 0%, rgba(96, 165, 250, 0.11) 38%, rgba(191, 219, 254, 0.04) 62%, transparent 75%)",
+            }}
+          />
+
+          {/* Bottom-Left Ambient Floating Blue Glow ("terus bawahnya kiri tipis saja sesuaikan") */}
+          <div
+            className="animate-ambient-left absolute bottom-[2%] sm:bottom-[4%] md:bottom-[6%] -left-[20%] sm:-left-[12%] md:-left-[6%] lg:left-[0%] w-[320px] h-[320px] sm:w-[460px] sm:h-[460px] md:w-[600px] md:h-[600px] lg:w-[720px] lg:h-[720px] rounded-full blur-2xl sm:blur-3xl"
+            style={{
+              background:
+                "radial-gradient(circle at center, rgba(71, 132, 255, 0.17) 0%, rgba(96, 165, 250, 0.10) 38%, rgba(191, 219, 254, 0.04) 62%, transparent 75%)",
+            }}
+          />
+        </div>
+
         {/* 16:9 Stage Matching Reference Composition */}
         <div
           id="about-stage"
@@ -587,7 +611,7 @@ export default function Home() {
             className="font-poppins italic hidden md:flex flex-col absolute left-[4.2%] top-[83%] z-30 text-[clamp(11px,1.22vw,22px)] font-normal leading-[1.34] text-[#527FD6] select-text"
           >
             <span>D3 Teknologi Informasi</span>
-            <span>Universitas Brawijaya</span>
+            <span className="font-bold">Universitas Brawijaya</span>
           </div>
 
           {/* Middle-Right Bio Description + Social Media Logos + Action Buttons (Right-Aligned) */}
@@ -638,7 +662,7 @@ export default function Home() {
 
             <div className="flex flex-col justify-end text-right text-sm font-normal leading-snug text-[#527FD6]">
               <span>D3 Teknologi Informasi</span>
-              <span>Universitas Brawijaya</span>
+              <span className="font-bold">Universitas Brawijaya</span>
             </div>
           </div>
         </div>

@@ -142,3 +142,53 @@ body {
   animation: aboutStarCalmFront 7s ease-in-out infinite;
   will-change: transform;
 }
+
+/* Ambient Floating Aesthetic Blue Gradient Orbs */
+@keyframes ambientFloatRight {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.82;
+  }
+  35% {
+    transform: translate3d(-30px, 22px, 0) scale(1.06);
+    opacity: 1;
+  }
+  70% {
+    transform: translate3d(-12px, -24px, 0) scale(0.96);
+    opacity: 0.74;
+  }
+}
+
+@keyframes ambientFloatLeft {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.82;
+  }
+  35% {
+    transform: translate3d(26px, -22px, 0) scale(0.95);
+    opacity: 0.72;
+  }
+  70% {
+    transform: translate3d(18px, 28px, 0) scale(1.06);
+    opacity: 1;
+  }
+}
+
+.animate-ambient-right {
+  animation: ambientFloatRight 14s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.animate-ambient-left {
+  animation: ambientFloatLeft 16s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-ambient-right,
+  .animate-ambient-left {
+    animation: none;
+  }
+}

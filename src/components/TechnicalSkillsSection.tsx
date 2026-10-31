@@ -473,12 +473,12 @@ function FloatingTechItem({
         style={{ animationDelay: `${item.delayMs}ms` }}
         className={`flex flex-col items-center justify-center ${item.idleAnimClass}`}
       >
-        {/* Tilted Floating Logo with Blue Drop-Shadow Behind It (Tools Concept) */}
+        {/* Tilted Floating Logo with Subtle Natural Shadow (Significantly Reduced Blue Shadow) */}
         <div
           style={{
             transform: `rotate(${item.baseTiltDeg}deg)`,
           }}
-          className={`flex items-center justify-center drop-shadow-[0_12px_20px_rgba(71,132,255,0.42)] transition-transform duration-300 ease-out group-hover:scale-112 ${
+          className={`flex items-center justify-center drop-shadow-[0_3px_6px_rgba(71,132,255,0.10)] transition-transform duration-300 ease-out group-hover:scale-112 ${
             isLarge
               ? "h-17 w-17 sm:h-21 sm:w-21"
               : "h-13 w-13 sm:h-15 sm:w-15"
@@ -488,7 +488,7 @@ function FloatingTechItem({
         </div>
 
         {/* Framework / Technology Name Below Logo */}
-        <span className="font-poppins mt-3 text-xs sm:text-[13px] font-semibold tracking-tight text-[#193A75] whitespace-nowrap drop-shadow-[0_2px_8px_rgba(71,132,255,0.18)] transition-colors duration-200 group-hover:text-[#4784FF]">
+        <span className="font-poppins mt-3 text-xs sm:text-[13px] font-semibold tracking-tight text-[#193A75] whitespace-nowrap transition-colors duration-200 group-hover:text-[#4784FF]">
           {item.name}
         </span>
       </div>
@@ -975,6 +975,20 @@ export default function TechnicalSkillsSection() {
       aria-label="Technical Skills"
       className="relative z-10 w-full bg-[#FFFFFF] py-20 sm:py-24 lg:py-28 px-4 sm:px-6 lg:px-10 overflow-hidden"
     >
+      {/* Ambient Moving Blue Glow (Left Side Continuing Below About Me) */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 overflow-hidden select-none z-0"
+      >
+        <div
+          className="animate-ambient-left absolute top-[4%] sm:top-[6%] md:top-[8%] -left-[20%] sm:-left-[12%] md:-left-[6%] lg:left-[0%] w-[320px] h-[320px] sm:w-[460px] sm:h-[460px] md:w-[600px] md:h-[600px] lg:w-[720px] lg:h-[720px] rounded-full blur-2xl sm:blur-3xl"
+          style={{
+            background:
+              "radial-gradient(circle at center, rgba(71, 132, 255, 0.16) 0%, rgba(96, 165, 250, 0.09) 38%, rgba(191, 219, 254, 0.03) 62%, transparent 75%)",
+          }}
+        />
+      </div>
+
       {/* Main Centered Content Container */}
       <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center text-center">
         {/* Section Title with Official Sharp Star Asset (assetslancip.webp) */}
